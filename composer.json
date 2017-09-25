@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "vinnia/util": "dev-master",
-        "vinnia/shipping": "dev-master"
+        "vinnia/util": "@dev",
+        "vinnia/shipping": "@dev"
     }
 }
