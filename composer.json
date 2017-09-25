@@ -1,0 +1,25 @@
+{
+    "name": "joakimcarlsten/vinnia-tracker",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "Joakim Carlsten",
+            "email": "joakim@vinnia.se"
+        }
+    ],
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/VinniaAB/shipping"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/VinniaAB/util"
+        }
+    ],
+    "require": {
+        "vinnia/util": "dev-master",
+        "vinnia/shipping": "dev-master"
+    }
+}
