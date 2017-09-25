@@ -104,6 +104,9 @@ class Vinnia_Tracker {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
 
+		$this->shortcodeManager = new Vinnia_Tracker_Shortcodes();
+		$this->shortcodeManager->registerShortcodes();
+
 		// Load API for generic admin functions
 		if ( is_admin() ) {
 			$this->admin = new Vinnia_Tracker_Admin_API();

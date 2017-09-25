@@ -20,6 +20,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Load plugin class files
+require_once( 'includes/class-vinnia-tracker-shortcodes.php' );
 require_once( 'includes/class-vinnia-tracker.php' );
 require_once( 'includes/class-vinnia-tracker-settings.php' );
 
