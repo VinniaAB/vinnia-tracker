@@ -348,6 +348,26 @@ class Vinnia_Tracker
             array_push($services, $fedexService);
         }
 
+        $upsUsername = get_option($this->settings->base.'ups_username');
+        $upsPassword = get_option($this->settings->base.'ups_password');
+        $upsAccessLicence = get_option($this->settings->base.'ups_access_licence');
+
+        if (!empty($upsUsername) && !empty($upsPassword) && !empty($upsAccessLicence)) {
+            $upsCredentials = new Vinnia\Shipping\UPS\Credentials($upsUsername, $upsPassword, $upsAccessLicence);
+            $upsService = new Vinnia\Shipping\UPS\Service(new GuzzleHttp\Client(), $upsCredentials);
+            array_push($services, $upsService);
+        }
+
+        $tntUsername = get_option($this->settings->base.'tnt_username');
+        $tntPassword = get_option($this->settings->base.'tnt_password');
+        $tntAccountNumber = get_option($this->settings->base.'tnt_account_number');
+
+        if (!empty($tntUsername) && !empty($tntPassword) && !empty($tntAccountNumber)) {
+            $tntCredentials = new Vinnia\Shipping\UPS\Credentials($tntUsername, $tntPassword, $tntAccountNumber);
+            $tntService = new Vinnia\Shipping\UPS\Service(new GuzzleHttp\Client(), $tntCredentials);
+            array_push($services, $tntService);
+        }
+
         return $services;
     }
 
