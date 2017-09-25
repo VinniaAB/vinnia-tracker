@@ -67,7 +67,7 @@ class Vinnia_Tracker_Settings {
 	 * @return void
 	 */
 	public function add_menu_item () {
-		$page = add_options_page( __( 'Plugin Settings', 'vinnia-tracker' ) , __( 'Plugin Settings', 'vinnia-tracker' ) , 'manage_options' , $this->parent->_token . '_settings' ,  array( $this, 'settings_page' ) );
+		$page = add_options_page( __( 'Tracker Settings', 'vinnia-tracker' ) , __( 'Tracker Settings', 'vinnia-tracker' ) , 'manage_options' , $this->parent->_token . '_settings' ,  array( $this, 'settings_page' ) );
 		add_action( 'admin_print_styles-' . $page, array( $this, 'settings_assets' ) );
 	}
 
@@ -107,7 +107,21 @@ class Vinnia_Tracker_Settings {
 	 */
 	private function settings_fields () {
 
-		$settings['standard'] = array(
+	    $settings['base'] = [
+            'title'					=> __( 'Base', 'vinnia-tracker' ),
+            'description'			=> __( 'The base settings page for tracker plugin.', 'vinnia-tracker' ),
+            'fields'                => [
+                array(
+                    'id' 			=> 'disable_fontawesome',
+                    'label'			=> __( 'Disable Font Awesome', 'vinnia-tracker' ),
+                    'description'	=> __( 'Untick this if you do NOT want the plugin to load font awesome (i.e. the theme already loads font awesome)', 'vinnia-tracker' ),
+                    'type'			=> 'checkbox',
+                    'default'		=> ''
+                ),
+            ]
+        ];
+
+        /*$settings['standard'] = array(
 			'title'					=> __( 'Standard', 'vinnia-tracker' ),
 			'description'			=> __( 'These are fairly standard form input fields.', 'vinnia-tracker' ),
 			'fields'				=> array(
@@ -213,7 +227,77 @@ class Vinnia_Tracker_Settings {
 					'default'		=> array( 'linux' )
 				)
 			)
-		);
+		);*/
+
+		$settings['DHL'] = [
+		  'title' => 'DHL',
+          'description' => 'Add credentials for tracking on DHL',
+          'fields' => [
+              [
+                  'id' 			=> 'dhl_site_id',
+                  'label'			=> 'Site ID',
+                  'description'	=> __( 'This is where you place the Site ID.', 'vinnia-tracker' ),
+                  'type'			=> 'text',
+                  'default'		=> '',
+                  'placeholder'	=> __( 'Site ID', 'vinnia-tracker' )
+              ],
+              [
+                  'id' 			=> 'dhl_password',
+                  'label'			=> __( 'Password' , 'vinnia-tracker' ),
+                  'description'	=> __( 'Password for DHL.', 'vinnia-tracker' ),
+                  'type'			=> 'password',
+                  'default'		=> '',
+                  'placeholder'	=> __( 'Account password', 'vinnia-tracker' )
+              ],
+              [
+                  'id' 			=> 'dhl_account_number',
+                  'label'			=> 'Account Number',
+                  'description'	=> __( 'An account number is required to track shipments.', 'vinnia-tracker' ),
+                  'type'			=> 'text',
+                  'default'		=> '',
+                  'placeholder'	=> __( 'Account Number', 'vinnia-tracker' )
+              ],
+          ]
+        ];
+
+		$settings['FedEx'] = [
+		  'title' => 'FedEx',
+          'description' => 'Add credentials for tracking on FedEx',
+          'fields' => [
+              [
+                  'id' 			=> 'fedex_credential_key',
+                  'label'			=> 'Credential Keu',
+                  'description'	=> __( 'This is where you place the credential key.', 'vinnia-tracker' ),
+                  'type'			=> 'text',
+                  'default'		=> '',
+                  'placeholder'	=> __( 'Credential Key', 'vinnia-tracker' )
+              ],
+              [
+                  'id' 			=> 'fedex_credential_password',
+                  'label'			=> __( 'Credential password' , 'vinnia-tracker' ),
+                  'description'	=> __( 'Credential password for FedEx.', 'vinnia-tracker' ),
+                  'type'			=> 'password',
+                  'default'		=> '',
+                  'placeholder'	=> __( 'Credential Password', 'vinnia-tracker' )
+              ],
+              [
+                  'id' 			=> 'fedex_account_number',
+                  'label'			=> 'Account Number',
+                  'description'	=> __( 'This is where you place the Account number.', 'vinnia-tracker' ),
+                  'type'			=> 'text',
+                  'default'		=> '',
+                  'placeholder'	=> __( 'Account Number', 'vinnia-tracker' )
+              ],
+              [
+                  'id' 			=> 'fedex_meter_number',
+                  'label'			=> 'Meter Number',
+                  'description'	=> __( 'A meter number is required to track shipments.', 'vinnia-tracker' ),
+                  'type'			=> 'text',
+                  'default'		=> '',
+                  'placeholder'	=> __( 'Meter Number', 'vinnia-tracker' )
+              ],
+          ]
+        ];
 
 		$settings = apply_filters( $this->parent->_token . '_settings_fields', $settings );
 

@@ -315,6 +315,36 @@ class Vinnia_Tracker
         update_option($this->_token . '_version', $this->_version);
     } // End _log_version_number ()
 
+
+    private function servicesFactory()
+    {
+        $services = [];
+        $guzzle = new GuzzleHttp\Client();
+
+        $dhlSiteId = get_option($this->settings->base.'dhl_site_id');
+        $dhlPassword = get_option($this->settings->base.'dhl_password');
+        $dhlAccountNumber = get_option($this->settings->base.'dhl_account_number');
+
+        if (!empty($dhlSiteId) && !empty($dhlPassword) && !empty($dhlAccountNumber)) {
+            $dhlCredentials = new Vinnia\Shipping\DHL\Credentials($dhlSiteId, $dhlPassword, $dhlAccountNumber);
+            $dhlService = new Vinnia\Shipping\DHL\Service(new GuzzleHttp\Client(), $dhlCredentials);
+            array_push($services, $dhlService);
+        }
+
+        $fedexCredentialKey = get_option($this->settings->base.'fedex_credential_key');
+        $fedexCredentialPassword = get_option($this->settings->base.'fedex_credential_password');
+        $fedexAccountNumber = get_option($this->settings->base.'fedex_account_number');
+        $fedexMeterNumber = get_option($this->settings->base.'fedex_meter_number');
+
+        if (!empty($fedexCredentialKey) && !empty($fedexCredentialPassword) && !empty($fedexAccountNumber) && !empty($fedexMeterNumber)) {
+            $fedexCredentials = new Vinnia\Shipping\FedEx\Credentials($fedexCredentialKey, $fedexCredentialPassword, $fedexAccountNumber, $fedexMeterNumber);
+            $fedexService = new Vinnia\Shipping\FedEx\Service($guzzle, $fedexCredentials);
+            array_push($services, $fedexService);
+        }
+
+        return $services;
+    }
+
     private function trackPackage()
     {
         $response = [];
@@ -330,12 +360,7 @@ class Vinnia_Tracker
             wp_die();
         }
 
-        $dhlCredentials = new Vinnia\Shipping\DHL\Credentials("DeliveryServ", "yYZUE1eJHR", "846644538");
-        $dhlService = new Vinnia\Shipping\DHL\Service(new GuzzleHttp\Client(), $dhlCredentials);
-
-        $compositeTracker = new \Vinnia\Shipping\CompositeTracker([
-            $dhlService
-        ]);
+        $compositeTracker = new \Vinnia\Shipping\CompositeTracker($this->servicesFactory());
 
         $promise = $compositeTracker->getTrackingStatus($trackingNumber)->then(
             function ($result) use ($trackingNumber) {
