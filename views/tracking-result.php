@@ -12,7 +12,7 @@
  */
 
 //$trackingResult = $data['Tracks'][0];
-$header = sprintf(__('Results from tracking of %s', 'ysds'), $trackingNumber);
+$header = sprintf(__('Results from tracking of %s', 'vinnia-tracker'), $trackingNumber);
 $activities = $result->activities;
 ?>
 

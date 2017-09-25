@@ -202,6 +202,11 @@ class Vinnia_Tracker
         wp_register_script($this->_token . '-frontend', esc_url($this->assets_url) . 'js/frontend' . $this->script_suffix . '.js', array('jquery'), $this->_version);
         wp_enqueue_script($this->_token . '-frontend');
         wp_localize_script($this->_token . '-frontend', 'PMPObject', ['ajaxUrl' => admin_url('admin-ajax.php')]);
+
+
+        if (empty(get_option($this->settings->base.'disable_fontawesome'))) {
+            wp_enqueue_script('font-awesome', 'https://use.fontawesome.com/7f36b8149b.js');
+        }
     } // End enqueue_scripts ()
 
     /**
@@ -226,6 +231,7 @@ class Vinnia_Tracker
     {
         wp_register_script($this->_token . '-admin', esc_url($this->assets_url) . 'js/admin' . $this->script_suffix . '.js', array('jquery'), $this->_version);
         wp_enqueue_script($this->_token . '-admin');
+
     } // End admin_enqueue_scripts ()
 
     /**
@@ -361,14 +367,19 @@ class Vinnia_Tracker
         }
 
         $compositeTracker = new \Vinnia\Shipping\CompositeTracker($this->servicesFactory());
+        $templateLoader = new TemplateLoader();
 
         $promise = $compositeTracker->getTrackingStatus($trackingNumber)->then(
-            function ($result) use ($trackingNumber) {
+            function ($result) use ($trackingNumber, $templateLoader) {
 
                 //if result == null
 
                 ob_start();
-                include plugin_dir_path(__DIR__) . 'views/tracking-result.php';
+                //include plugin_dir_path(__DIR__) . 'views/tracking-result.php';
+                $templateLoader->getTemplate('tracking-result.php', [
+                    "result" => $result,
+                    "trackingNumber" => $trackingNumber
+                ]);
                 $html = ob_get_clean();
 
                 $response['html'] = $html;
@@ -390,7 +401,6 @@ class Vinnia_Tracker
         $result = $promise->wait();
 
         //error_log(print_r($result, true));
-
 
         wp_die();
     }
