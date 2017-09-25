@@ -1,124 +1,138 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if (!defined('ABSPATH')) exit;
 
-class Vinnia_Tracker_Settings {
+class Vinnia_Tracker_Settings
+{
 
-	/**
-	 * The single instance of Vinnia_Tracker_Settings.
-	 * @var 	object
-	 * @access  private
-	 * @since 	1.0.0
-	 */
-	private static $_instance = null;
+    /**
+     * The single instance of Vinnia_Tracker_Settings.
+     * @var    object
+     * @access  private
+     * @since    1.0.0
+     */
+    private static $_instance = null;
 
-	/**
-	 * The main plugin object.
-	 * @var 	object
-	 * @access  public
-	 * @since 	1.0.0
-	 */
-	public $parent = null;
+    /**
+     * The main plugin object.
+     * @var    object
+     * @access  public
+     * @since    1.0.0
+     */
+    public $parent = null;
 
-	/**
-	 * Prefix for plugin settings.
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
-	 */
-	public $base = '';
+    /**
+     * Prefix for plugin settings.
+     * @var     string
+     * @access  public
+     * @since   1.0.0
+     */
+    public $base = '';
 
-	/**
-	 * Available settings for plugin.
-	 * @var     array
-	 * @access  public
-	 * @since   1.0.0
-	 */
-	public $settings = array();
+    /**
+     * Available settings for plugin.
+     * @var     array
+     * @access  public
+     * @since   1.0.0
+     */
+    public $settings = array();
 
-	public function __construct ( $parent ) {
-		$this->parent = $parent;
+    public function __construct($parent)
+    {
+        $this->parent = $parent;
 
-		$this->base = 'wpt_';
+        $this->base = 'wpt_';
 
-		// Initialise settings
-		add_action( 'init', array( $this, 'init_settings' ), 11 );
+        // Initialise settings
+        add_action('init', array($this, 'init_settings'), 11);
 
-		// Register plugin settings
-		add_action( 'admin_init' , array( $this, 'register_settings' ) );
+        // Register plugin settings
+        add_action('admin_init', array($this, 'register_settings'));
 
-		// Add settings page to menu
-		add_action( 'admin_menu' , array( $this, 'add_menu_item' ) );
+        // Add settings page to menu
+        add_action('admin_menu', array($this, 'add_menu_item'));
 
-		// Add settings link to plugins page
-		add_filter( 'plugin_action_links_' . plugin_basename( $this->parent->file ) , array( $this, 'add_settings_link' ) );
-	}
+        // Add settings link to plugins page
+        add_filter('plugin_action_links_' . plugin_basename($this->parent->file), array($this, 'add_settings_link'));
+    }
 
-	/**
-	 * Initialise settings
-	 * @return void
-	 */
-	public function init_settings () {
-		$this->settings = $this->settings_fields();
-	}
+    /**
+     * Initialise settings
+     * @return void
+     */
+    public function init_settings()
+    {
+        $this->settings = $this->settings_fields();
+    }
 
-	/**
-	 * Add settings page to admin menu
-	 * @return void
-	 */
-	public function add_menu_item () {
-		$page = add_options_page( __( 'Tracker Settings', 'vinnia-tracker' ) , __( 'Tracker Settings', 'vinnia-tracker' ) , 'manage_options' , $this->parent->_token . '_settings' ,  array( $this, 'settings_page' ) );
-		add_action( 'admin_print_styles-' . $page, array( $this, 'settings_assets' ) );
-	}
+    /**
+     * Add settings page to admin menu
+     * @return void
+     */
+    public function add_menu_item()
+    {
+        $page = add_options_page(__('Tracker Settings', 'vinnia-tracker'), __('Tracker Settings', 'vinnia-tracker'), 'manage_options', $this->parent->_token . '_settings', array($this, 'settings_page'));
+        add_action('admin_print_styles-' . $page, array($this, 'settings_assets'));
+    }
 
-	/**
-	 * Load settings JS & CSS
-	 * @return void
-	 */
-	public function settings_assets () {
+    /**
+     * Load settings JS & CSS
+     * @return void
+     */
+    public function settings_assets()
+    {
 
-		// We're including the farbtastic script & styles here because they're needed for the colour picker
-		// If you're not including a colour picker field then you can leave these calls out as well as the farbtastic dependency for the wpt-admin-js script below
-		wp_enqueue_style( 'farbtastic' );
-    	wp_enqueue_script( 'farbtastic' );
+        // We're including the farbtastic script & styles here because they're needed for the colour picker
+        // If you're not including a colour picker field then you can leave these calls out as well as the farbtastic dependency for the wpt-admin-js script below
+        wp_enqueue_style('farbtastic');
+        wp_enqueue_script('farbtastic');
 
-    	// We're including the WP media scripts here because they're needed for the image upload field
-    	// If you're not including an image upload then you can leave this function call out
-    	wp_enqueue_media();
+        // We're including the WP media scripts here because they're needed for the image upload field
+        // If you're not including an image upload then you can leave this function call out
+        wp_enqueue_media();
 
-    	wp_register_script( $this->parent->_token . '-settings-js', $this->parent->assets_url . 'js/settings' . $this->parent->script_suffix . '.js', array( 'farbtastic', 'jquery' ), '1.0.0' );
-    	wp_enqueue_script( $this->parent->_token . '-settings-js' );
-	}
+        wp_register_script($this->parent->_token . '-settings-js', $this->parent->assets_url . 'js/settings' . $this->parent->script_suffix . '.js', array('farbtastic', 'jquery'), '1.0.0');
+        wp_enqueue_script($this->parent->_token . '-settings-js');
+    }
 
-	/**
-	 * Add settings link to plugin list table
-	 * @param  array $links Existing links
-	 * @return array 		Modified links
-	 */
-	public function add_settings_link ( $links ) {
-		$settings_link = '<a href="options-general.php?page=' . $this->parent->_token . '_settings">' . __( 'Settings', 'vinnia-tracker' ) . '</a>';
-  		array_push( $links, $settings_link );
-  		return $links;
-	}
+    /**
+     * Add settings link to plugin list table
+     * @param  array $links Existing links
+     * @return array        Modified links
+     */
+    public function add_settings_link($links)
+    {
+        $settings_link = '<a href="options-general.php?page=' . $this->parent->_token . '_settings">' . __('Settings', 'vinnia-tracker') . '</a>';
+        array_push($links, $settings_link);
+        return $links;
+    }
 
-	/**
-	 * Build settings fields
-	 * @return array Fields to be displayed on settings page
-	 */
-	private function settings_fields () {
+    /**
+     * Build settings fields
+     * @return array Fields to be displayed on settings page
+     */
+    private function settings_fields()
+    {
 
-	    $settings['base'] = [
-            'title'					=> __( 'Base', 'vinnia-tracker' ),
-            'description'			=> __( 'The base settings page for tracker plugin.', 'vinnia-tracker' ),
-            'fields'                => [
+        $settings['base'] = [
+            'title' => __('Base', 'vinnia-tracker'),
+            'description' => __('The base settings page for tracker plugin.', 'vinnia-tracker'),
+            'fields' => [
                 array(
-                    'id' 			=> 'disable_fontawesome',
-                    'label'			=> __( 'Disable Font Awesome', 'vinnia-tracker' ),
-                    'description'	=> __( 'Untick this if you do NOT want the plugin to load font awesome (i.e. the theme already loads font awesome)', 'vinnia-tracker' ),
-                    'type'			=> 'checkbox',
-                    'default'		=> ''
+                    'id' => 'disable_fontawesome',
+                    'label' => __('Disable Font Awesome', 'vinnia-tracker'),
+                    'description' => __('Untick this if you do NOT want the plugin to load font awesome (i.e. the theme already loads font awesome)', 'vinnia-tracker'),
+                    'type' => 'checkbox',
+                    'default' => ''
                 ),
-            ]
+                [
+                    'id' => 'disable_css_loading',
+                    'label' => __('Disable CSS loading', 'vinnia-tracker'),
+                    'description' => __('Untick this if you do NOT want the plugin to load its own css files (i.e. the theme overloads template and css files)', 'vinnia-tracker'),
+                    'type' => 'checkbox',
+                    'default' => ''
+                ]
+            ],
         ];
 
         /*$settings['standard'] = array(
@@ -229,232 +243,303 @@ class Vinnia_Tracker_Settings {
 			)
 		);*/
 
-		$settings['DHL'] = [
-		  'title' => 'DHL',
-          'description' => 'Add credentials for tracking on DHL',
-          'fields' => [
-              [
-                  'id' 			=> 'dhl_site_id',
-                  'label'			=> 'Site ID',
-                  'description'	=> __( 'This is where you place the Site ID.', 'vinnia-tracker' ),
-                  'type'			=> 'text',
-                  'default'		=> '',
-                  'placeholder'	=> __( 'Site ID', 'vinnia-tracker' )
-              ],
-              [
-                  'id' 			=> 'dhl_password',
-                  'label'			=> __( 'Password' , 'vinnia-tracker' ),
-                  'description'	=> __( 'Password for DHL.', 'vinnia-tracker' ),
-                  'type'			=> 'password',
-                  'default'		=> '',
-                  'placeholder'	=> __( 'Account password', 'vinnia-tracker' )
-              ],
-              [
-                  'id' 			=> 'dhl_account_number',
-                  'label'			=> 'Account Number',
-                  'description'	=> __( 'An account number is required to track shipments.', 'vinnia-tracker' ),
-                  'type'			=> 'text',
-                  'default'		=> '',
-                  'placeholder'	=> __( 'Account Number', 'vinnia-tracker' )
-              ],
-          ]
+        $settings['DHL'] = [
+            'title' => 'DHL',
+            'description' => 'Add credentials for tracking on DHL',
+            'fields' => [
+                [
+                    'id' => 'dhl_site_id',
+                    'label' => 'Site ID',
+                    'description' => __('This is where you place the Site ID.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('Site ID', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'dhl_password',
+                    'label' => __('Password', 'vinnia-tracker'),
+                    'description' => __('Password for DHL.', 'vinnia-tracker'),
+                    'type' => 'password',
+                    'default' => '',
+                    'placeholder' => __('Account password', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'dhl_account_number',
+                    'label' => 'Account Number',
+                    'description' => __('An account number is required to track shipments.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('Account Number', 'vinnia-tracker')
+                ],
+            ]
         ];
 
-		$settings['FedEx'] = [
-		  'title' => 'FedEx',
-          'description' => 'Add credentials for tracking on FedEx',
-          'fields' => [
-              [
-                  'id' 			=> 'fedex_credential_key',
-                  'label'			=> 'Credential Keu',
-                  'description'	=> __( 'This is where you place the credential key.', 'vinnia-tracker' ),
-                  'type'			=> 'text',
-                  'default'		=> '',
-                  'placeholder'	=> __( 'Credential Key', 'vinnia-tracker' )
-              ],
-              [
-                  'id' 			=> 'fedex_credential_password',
-                  'label'			=> __( 'Credential password' , 'vinnia-tracker' ),
-                  'description'	=> __( 'Credential password for FedEx.', 'vinnia-tracker' ),
-                  'type'			=> 'password',
-                  'default'		=> '',
-                  'placeholder'	=> __( 'Credential Password', 'vinnia-tracker' )
-              ],
-              [
-                  'id' 			=> 'fedex_account_number',
-                  'label'			=> 'Account Number',
-                  'description'	=> __( 'This is where you place the Account number.', 'vinnia-tracker' ),
-                  'type'			=> 'text',
-                  'default'		=> '',
-                  'placeholder'	=> __( 'Account Number', 'vinnia-tracker' )
-              ],
-              [
-                  'id' 			=> 'fedex_meter_number',
-                  'label'			=> 'Meter Number',
-                  'description'	=> __( 'A meter number is required to track shipments.', 'vinnia-tracker' ),
-                  'type'			=> 'text',
-                  'default'		=> '',
-                  'placeholder'	=> __( 'Meter Number', 'vinnia-tracker' )
-              ],
-          ]
+        $settings['FedEx'] = [
+            'title' => 'FedEx',
+            'description' => 'Add credentials for tracking on FedEx',
+            'fields' => [
+                [
+                    'id' => 'fedex_credential_key',
+                    'label' => 'Credential Keu',
+                    'description' => __('This is where you place the credential key.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('Credential Key', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'fedex_credential_password',
+                    'label' => __('Credential password', 'vinnia-tracker'),
+                    'description' => __('Credential password for FedEx.', 'vinnia-tracker'),
+                    'type' => 'password',
+                    'default' => '',
+                    'placeholder' => __('Credential Password', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'fedex_account_number',
+                    'label' => 'Account Number',
+                    'description' => __('This is where you place the Account number.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('Account Number', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'fedex_meter_number',
+                    'label' => 'Meter Number',
+                    'description' => __('A meter number is required to track shipments.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('Meter Number', 'vinnia-tracker')
+                ],
+            ]
         ];
 
-		$settings = apply_filters( $this->parent->_token . '_settings_fields', $settings );
 
-		return $settings;
-	}
+        $settings['UPS'] = [
+            'title' => 'UPS',
+            'description' => 'Add credentials for tracking on UPS',
+            'fields' => [
+                [
+                    'id' => 'ups_username',
+                    'label' => 'Username',
+                    'description' => __('This is where you place the username.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('username', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'ups_password',
+                    'label' => __('Password', 'vinnia-tracker'),
+                    'description' => __('Password for UPS.', 'vinnia-tracker'),
+                    'type' => 'password',
+                    'default' => '',
+                    'placeholder' => __('Account password', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'ups_access_licence',
+                    'label' => 'Access Licence',
+                    'description' => __('An access licence is required to track shipments.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('Access Licence', 'vinnia-tracker')
+                ],
+            ]
+        ];
 
-	/**
-	 * Register plugin settings
-	 * @return void
-	 */
-	public function register_settings () {
-		if ( is_array( $this->settings ) ) {
 
-			// Check posted/selected tab
-			$current_section = '';
-			if ( isset( $_POST['tab'] ) && $_POST['tab'] ) {
-				$current_section = $_POST['tab'];
-			} else {
-				if ( isset( $_GET['tab'] ) && $_GET['tab'] ) {
-					$current_section = $_GET['tab'];
-				}
-			}
 
-			foreach ( $this->settings as $section => $data ) {
+        $settings['TNT'] = [
+            'title' => 'TNT',
+            'description' => 'Add credentials for tracking on TNT',
+            'fields' => [
+                [
+                    'id' => 'tnt_username',
+                    'label' => 'Username',
+                    'description' => __('This is where you place the username.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('username', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'tnt_password',
+                    'label' => __('Password', 'vinnia-tracker'),
+                    'description' => __('Password for TNT.', 'vinnia-tracker'),
+                    'type' => 'password',
+                    'default' => '',
+                    'placeholder' => __('Account password', 'vinnia-tracker')
+                ],
+                [
+                    'id' => 'tnt_account_number',
+                    'label' => 'Account Number',
+                    'description' => __('An account number is required to track shipments.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('Account number', 'vinnia-tracker')
+                ],
+            ]
+        ];
 
-				if ( $current_section && $current_section != $section ) continue;
+        $settings = apply_filters($this->parent->_token . '_settings_fields', $settings);
 
-				// Add section to page
-				add_settings_section( $section, $data['title'], array( $this, 'settings_section' ), $this->parent->_token . '_settings' );
+        return $settings;
+    }
 
-				foreach ( $data['fields'] as $field ) {
+    /**
+     * Register plugin settings
+     * @return void
+     */
+    public function register_settings()
+    {
+        if (is_array($this->settings)) {
 
-					// Validation callback for field
-					$validation = '';
-					if ( isset( $field['callback'] ) ) {
-						$validation = $field['callback'];
-					}
+            // Check posted/selected tab
+            $current_section = '';
+            if (isset($_POST['tab']) && $_POST['tab']) {
+                $current_section = $_POST['tab'];
+            } else {
+                if (isset($_GET['tab']) && $_GET['tab']) {
+                    $current_section = $_GET['tab'];
+                }
+            }
 
-					// Register field
-					$option_name = $this->base . $field['id'];
-					register_setting( $this->parent->_token . '_settings', $option_name, $validation );
+            foreach ($this->settings as $section => $data) {
 
-					// Add field to page
-					add_settings_field( $field['id'], $field['label'], array( $this->parent->admin, 'display_field' ), $this->parent->_token . '_settings', $section, array( 'field' => $field, 'prefix' => $this->base ) );
-				}
+                if ($current_section && $current_section != $section) continue;
 
-				if ( ! $current_section ) break;
-			}
-		}
-	}
+                // Add section to page
+                add_settings_section($section, $data['title'], array($this, 'settings_section'), $this->parent->_token . '_settings');
 
-	public function settings_section ( $section ) {
-		$html = '<p> ' . $this->settings[ $section['id'] ]['description'] . '</p>' . "\n";
-		echo $html;
-	}
+                foreach ($data['fields'] as $field) {
 
-	/**
-	 * Load settings page content
-	 * @return void
-	 */
-	public function settings_page () {
+                    // Validation callback for field
+                    $validation = '';
+                    if (isset($field['callback'])) {
+                        $validation = $field['callback'];
+                    }
 
-		// Build page HTML
-		$html = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
-			$html .= '<h2>' . __( 'Plugin Settings' , 'vinnia-tracker' ) . '</h2>' . "\n";
+                    // Register field
+                    $option_name = $this->base . $field['id'];
+                    register_setting($this->parent->_token . '_settings', $option_name, $validation);
 
-			$tab = '';
-			if ( isset( $_GET['tab'] ) && $_GET['tab'] ) {
-				$tab .= $_GET['tab'];
-			}
+                    // Add field to page
+                    add_settings_field($field['id'], $field['label'], array($this->parent->admin, 'display_field'), $this->parent->_token . '_settings', $section, array('field' => $field, 'prefix' => $this->base));
+                }
 
-			// Show page tabs
-			if ( is_array( $this->settings ) && 1 < count( $this->settings ) ) {
+                if (!$current_section) break;
+            }
+        }
+    }
 
-				$html .= '<h2 class="nav-tab-wrapper">' . "\n";
+    public function settings_section($section)
+    {
+        $html = '<p> ' . $this->settings[$section['id']]['description'] . '</p>' . "\n";
+        echo $html;
+    }
 
-				$c = 0;
-				foreach ( $this->settings as $section => $data ) {
+    /**
+     * Load settings page content
+     * @return void
+     */
+    public function settings_page()
+    {
 
-					// Set tab class
-					$class = 'nav-tab';
-					if ( ! isset( $_GET['tab'] ) ) {
-						if ( 0 == $c ) {
-							$class .= ' nav-tab-active';
-						}
-					} else {
-						if ( isset( $_GET['tab'] ) && $section == $_GET['tab'] ) {
-							$class .= ' nav-tab-active';
-						}
-					}
+        // Build page HTML
+        $html = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
+        $html .= '<h2>' . __('Plugin Settings', 'vinnia-tracker') . '</h2>' . "\n";
 
-					// Set tab link
-					$tab_link = add_query_arg( array( 'tab' => $section ) );
-					if ( isset( $_GET['settings-updated'] ) ) {
-						$tab_link = remove_query_arg( 'settings-updated', $tab_link );
-					}
+        $tab = '';
+        if (isset($_GET['tab']) && $_GET['tab']) {
+            $tab .= $_GET['tab'];
+        }
 
-					// Output tab
-					$html .= '<a href="' . $tab_link . '" class="' . esc_attr( $class ) . '">' . esc_html( $data['title'] ) . '</a>' . "\n";
+        // Show page tabs
+        if (is_array($this->settings) && 1 < count($this->settings)) {
 
-					++$c;
-				}
+            $html .= '<h2 class="nav-tab-wrapper">' . "\n";
 
-				$html .= '</h2>' . "\n";
-			}
+            $c = 0;
+            foreach ($this->settings as $section => $data) {
 
-			$html .= '<form method="post" action="options.php" enctype="multipart/form-data">' . "\n";
+                // Set tab class
+                $class = 'nav-tab';
+                if (!isset($_GET['tab'])) {
+                    if (0 == $c) {
+                        $class .= ' nav-tab-active';
+                    }
+                } else {
+                    if (isset($_GET['tab']) && $section == $_GET['tab']) {
+                        $class .= ' nav-tab-active';
+                    }
+                }
 
-				// Get settings fields
-				ob_start();
-				settings_fields( $this->parent->_token . '_settings' );
-				do_settings_sections( $this->parent->_token . '_settings' );
-				$html .= ob_get_clean();
+                // Set tab link
+                $tab_link = add_query_arg(array('tab' => $section));
+                if (isset($_GET['settings-updated'])) {
+                    $tab_link = remove_query_arg('settings-updated', $tab_link);
+                }
 
-				$html .= '<p class="submit">' . "\n";
-					$html .= '<input type="hidden" name="tab" value="' . esc_attr( $tab ) . '" />' . "\n";
-					$html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr( __( 'Save Settings' , 'vinnia-tracker' ) ) . '" />' . "\n";
-				$html .= '</p>' . "\n";
-			$html .= '</form>' . "\n";
-		$html .= '</div>' . "\n";
+                // Output tab
+                $html .= '<a href="' . $tab_link . '" class="' . esc_attr($class) . '">' . esc_html($data['title']) . '</a>' . "\n";
 
-		echo $html;
-	}
+                ++$c;
+            }
 
-	/**
-	 * Main Vinnia_Tracker_Settings Instance
-	 *
-	 * Ensures only one instance of Vinnia_Tracker_Settings is loaded or can be loaded.
-	 *
-	 * @since 1.0.0
-	 * @static
-	 * @see Vinnia_Tracker()
-	 * @return Main Vinnia_Tracker_Settings instance
-	 */
-	public static function instance ( $parent ) {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self( $parent );
-		}
-		return self::$_instance;
-	} // End instance()
+            $html .= '</h2>' . "\n";
+        }
 
-	/**
-	 * Cloning is forbidden.
-	 *
-	 * @since 1.0.0
-	 */
-	public function __clone () {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->parent->_version );
-	} // End __clone()
+        $html .= '<form method="post" action="options.php" enctype="multipart/form-data">' . "\n";
 
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 *
-	 * @since 1.0.0
-	 */
-	public function __wakeup () {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->parent->_version );
-	} // End __wakeup()
+        // Get settings fields
+        ob_start();
+        settings_fields($this->parent->_token . '_settings');
+        do_settings_sections($this->parent->_token . '_settings');
+        $html .= ob_get_clean();
+
+        $html .= '<p class="submit">' . "\n";
+        $html .= '<input type="hidden" name="tab" value="' . esc_attr($tab) . '" />' . "\n";
+        $html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr(__('Save Settings', 'vinnia-tracker')) . '" />' . "\n";
+        $html .= '</p>' . "\n";
+        $html .= '</form>' . "\n";
+        $html .= '</div>' . "\n";
+
+        echo $html;
+    }
+
+    /**
+     * Main Vinnia_Tracker_Settings Instance
+     *
+     * Ensures only one instance of Vinnia_Tracker_Settings is loaded or can be loaded.
+     *
+     * @since 1.0.0
+     * @static
+     * @see Vinnia_Tracker()
+     * @return Main Vinnia_Tracker_Settings instance
+     */
+    public static function instance($parent)
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self($parent);
+        }
+        return self::$_instance;
+    } // End instance()
+
+    /**
+     * Cloning is forbidden.
+     *
+     * @since 1.0.0
+     */
+    public function __clone()
+    {
+        _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->parent->_version);
+    } // End __clone()
+
+    /**
+     * Unserializing instances of this class is forbidden.
+     *
+     * @since 1.0.0
+     */
+    public function __wakeup()
+    {
+        _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->parent->_version);
+    } // End __wakeup()
 
 }
