@@ -11,9 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Vinnia_Tracker_Shortcodes {
 
 
-    public function __construct()
-    {
+    private $parent;
 
+    public function __construct($parent)
+    {
+        $this->parent = $parent;
     }
 
     public function registerShortcodes()

@@ -104,8 +104,13 @@ class Vinnia_Tracker {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
 
-		$this->shortcodeManager = new Vinnia_Tracker_Shortcodes();
+		$this->shortcodeManager = new Vinnia_Tracker_Shortcodes($this);
 		$this->shortcodeManager->registerShortcodes();
+
+        //Add AJAX action
+        add_action('wp_ajax_nopriv_track_package', function () {
+            $this->trackPackage();
+        });
 
 		// Load API for generic admin functions
 		if ( is_admin() ) {
@@ -171,6 +176,7 @@ class Vinnia_Tracker {
 	public function enqueue_scripts () {
 		wp_register_script( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'js/frontend' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
 		wp_enqueue_script( $this->_token . '-frontend' );
+        wp_localize_script($this->_token . '-frontend', 'PMPObject', ['ajaxUrl' => admin_url('admin-ajax.php')]);
 	} // End enqueue_scripts ()
 
 	/**
@@ -274,5 +280,28 @@ class Vinnia_Tracker {
 	private function _log_version_number () {
 		update_option( $this->_token . '_version', $this->_version );
 	} // End _log_version_number ()
+
+    private function trackPackage()
+    {
+        $response = [];
+        $trackingNumber = $_POST['trackingNumber'] ?? '';
+
+        if (empty($trackingNumber)) {
+            $return = [
+                'success' => false,
+                'html' => sprintf('<div class="alert alert-info alert-dismisible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>%s</div>', __('No tracking number supplied', 'ysds'))
+            ];
+            http_response_code(422);
+            echo wp_json_encode($return);
+            wp_die();
+        }
+
+        $response['html'] = '<h1>Hello world!</h1>';
+        $response['status'] = 'success';
+        $response['tracking'] = $trackingNumber;
+
+        echo wp_json_encode($response);
+        wp_die();
+    }
 
 }
