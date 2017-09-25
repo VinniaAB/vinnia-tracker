@@ -1,0 +1,175 @@
+@import "../../node_modules/font-awesome/less/font-awesome";
+
+
+// Color variables (appears count calculates by raw css)
+@color0: #ffffff; // Appears 3 times
+@color1: #cccccc; // Appears 2 times
+@color-success: green;
+@color-warning: yellow;
+@color-info: blue;
+@color-error: red;
+
+
+.timeline {
+  clear: both;
+  list-style: none;
+  padding: 20px 0 20px;
+  position: relative;
+  &:before {
+    background-color: #eeeeee;
+    bottom: 0;
+    content: " ";
+    left: 50%;
+    margin-left: -1.5px;
+    position: absolute;
+    top: 0;
+    width: 3px;
+  }
+}
+.timeline>li {
+  margin-bottom: 20px;
+  position: relative;
+  &:before {
+    content: " ";
+    content: " ";
+    display: table;
+    display: table;
+  }
+  &:after {
+    clear: both;
+    clear: both;
+    content: " ";
+    content: " ";
+    display: table;
+    display: table;
+  }
+}
+.timeline>li>.timeline-panel {
+  -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+  border-radius: 2px;
+  border: 1px solid #d4d4d4;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.175);
+  float: left;
+  padding: 20px;
+  position: relative;
+  width: 42%;
+  &:before {
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid @color1;
+    border-right: 0 solid @color1;
+    border-top: 15px solid transparent;
+    content: " ";
+    display: inline-block;
+    position: absolute;
+    right: -15px;
+    top: 26px;
+  }
+  &:after {
+    border-bottom: 14px solid transparent;
+    border-left: 14px solid @color0;
+    border-right: 0 solid @color0;
+    border-top: 14px solid transparent;
+    content: " ";
+    display: inline-block;
+    position: absolute;
+    right: -14px;
+    top: 27px;
+  }
+}
+.timeline>li>.timeline-badge {
+  background-color: #999999;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  color: @color0;
+  font-size: 1.4em;
+  height: 50px;
+  left: 50%;
+  line-height: 50px;
+  margin-left: -25px;
+  position: absolute;
+  text-align: center;
+  top: 16px;
+  width: 50px;
+  z-index: 100;
+}
+.timeline>li.timeline-inverted>.timeline-panel {
+  float: right;
+  &:before {
+    border-left-width: 0;
+    border-right-width: 15px;
+    left: -15px;
+    right: auto;
+  }
+  &:after {
+    border-left-width: 0;
+    border-right-width: 14px;
+    left: -14px;
+    right: auto;
+  }
+}
+.timeline-badge.primary {
+  background-color: @color-success !important;
+}
+.timeline-badge.success {
+  background-color: @color-success !important;
+}
+.timeline-badge.warning {
+  background-color: @color-warning !important;
+}
+.timeline-badge.danger {
+  background-color: @color-error !important;
+}
+.timeline-badge.info {
+  background-color: @color-info !important;
+}
+.timeline-title {
+  color: inherit;
+  margin-top: 0;
+}
+.timeline-body>p {
+  margin-bottom: 0;
+}
+.timeline-body>ul {
+  margin-bottom: 0;
+}
+.timeline-body>p+p {
+  margin-top: 5px;
+}
+
+.timeline__city,
+.timeline__country {
+  text-transform: capitalize;
+}
+
+@media (max-width: 767px) {
+  ul.timeline:before {
+    left: 40px;
+  }
+
+  ul.timeline>li>.timeline-panel {
+    float: right;
+    //The ~'' prevent less compiler from evaluating and treats as a string
+    width: -moz-calc(~'100% - 90px');
+    width: -webkit-calc(~'100% - 90px');
+    width: calc(~'100% - 90px');
+    &:before {
+      border-left-width: 0;
+      border-right-width: 15px;
+      left: -15px;
+      right: auto;
+    }
+    &:after {
+      border-left-width: 0;
+      border-right-width: 14px;
+      left: -14px;
+      right: auto;
+    }
+  }
+  ul.timeline>li>.timeline-badge {
+    left: 15px;
+    margin-left: 0;
+    top: 16px;
+  }
+}
