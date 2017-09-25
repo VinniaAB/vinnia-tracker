@@ -204,7 +204,7 @@ class Vinnia_Tracker
         wp_localize_script($this->_token . '-frontend', 'PMPObject', ['ajaxUrl' => admin_url('admin-ajax.php')]);
 
 
-        if (empty(get_option($this->settings->base.'disable_fontawesome'))) {
+        if (empty(get_option($this->settings->base . 'disable_fontawesome'))) {
             wp_enqueue_script('font-awesome', 'https://use.fontawesome.com/7f36b8149b.js');
         }
     } // End enqueue_scripts ()
@@ -327,9 +327,9 @@ class Vinnia_Tracker
         $services = [];
         $guzzle = new GuzzleHttp\Client();
 
-        $dhlSiteId = get_option($this->settings->base.'dhl_site_id');
-        $dhlPassword = get_option($this->settings->base.'dhl_password');
-        $dhlAccountNumber = get_option($this->settings->base.'dhl_account_number');
+        $dhlSiteId = get_option($this->settings->base . 'dhl_site_id');
+        $dhlPassword = get_option($this->settings->base . 'dhl_password');
+        $dhlAccountNumber = get_option($this->settings->base . 'dhl_account_number');
 
         if (!empty($dhlSiteId) && !empty($dhlPassword) && !empty($dhlAccountNumber)) {
             $dhlCredentials = new Vinnia\Shipping\DHL\Credentials($dhlSiteId, $dhlPassword, $dhlAccountNumber);
@@ -337,20 +337,9 @@ class Vinnia_Tracker
             array_push($services, $dhlService);
         }
 
-        $fedexCredentialKey = get_option($this->settings->base.'fedex_credential_key');
-        $fedexCredentialPassword = get_option($this->settings->base.'fedex_credential_password');
-        $fedexAccountNumber = get_option($this->settings->base.'fedex_account_number');
-        $fedexMeterNumber = get_option($this->settings->base.'fedex_meter_number');
-
-        if (!empty($fedexCredentialKey) && !empty($fedexCredentialPassword) && !empty($fedexAccountNumber) && !empty($fedexMeterNumber)) {
-            $fedexCredentials = new Vinnia\Shipping\FedEx\Credentials($fedexCredentialKey, $fedexCredentialPassword, $fedexAccountNumber, $fedexMeterNumber);
-            $fedexService = new Vinnia\Shipping\FedEx\Service($guzzle, $fedexCredentials);
-            array_push($services, $fedexService);
-        }
-
-        $upsUsername = get_option($this->settings->base.'ups_username');
-        $upsPassword = get_option($this->settings->base.'ups_password');
-        $upsAccessLicence = get_option($this->settings->base.'ups_access_licence');
+        $upsUsername = get_option($this->settings->base . 'ups_username');
+        $upsPassword = get_option($this->settings->base . 'ups_password');
+        $upsAccessLicence = get_option($this->settings->base . 'ups_access_licence');
 
         if (!empty($upsUsername) && !empty($upsPassword) && !empty($upsAccessLicence)) {
             $upsCredentials = new Vinnia\Shipping\UPS\Credentials($upsUsername, $upsPassword, $upsAccessLicence);
@@ -358,14 +347,29 @@ class Vinnia_Tracker
             array_push($services, $upsService);
         }
 
-        $tntUsername = get_option($this->settings->base.'tnt_username');
-        $tntPassword = get_option($this->settings->base.'tnt_password');
-        $tntAccountNumber = get_option($this->settings->base.'tnt_account_number');
+        $tntUsername = get_option($this->settings->base . 'tnt_username');
+        $tntPassword = get_option($this->settings->base . 'tnt_password');
+        $tntAccountNumber = get_option($this->settings->base . 'tnt_account_number');
+        $tntAccountCountryCode = get_option($this->settings->base . 'tnt_account_country_code');
 
-        if (!empty($tntUsername) && !empty($tntPassword) && !empty($tntAccountNumber)) {
-            $tntCredentials = new Vinnia\Shipping\UPS\Credentials($tntUsername, $tntPassword, $tntAccountNumber);
-            $tntService = new Vinnia\Shipping\UPS\Service(new GuzzleHttp\Client(), $tntCredentials);
+        if (!empty($tntUsername) && !empty($tntPassword) && !empty($tntAccountNumber) && !empty($tntAccountCountryCode)) {
+            $tntCredentials = new Vinnia\Shipping\TNT\Credentials($tntUsername, $tntPassword, $tntAccountNumber, $tntAccountCountryCode);
+            $tntService = new Vinnia\Shipping\TNT\Service(new GuzzleHttp\Client(), $tntCredentials);
             array_push($services, $tntService);
+        }
+
+        /**
+         * TODO: Fedex last right now because it returns non-empty results even if not found
+         */
+        $fedexCredentialKey = get_option($this->settings->base . 'fedex_credential_key');
+        $fedexCredentialPassword = get_option($this->settings->base . 'fedex_credential_password');
+        $fedexAccountNumber = get_option($this->settings->base . 'fedex_account_number');
+        $fedexMeterNumber = get_option($this->settings->base . 'fedex_meter_number');
+
+        if (!empty($fedexCredentialKey) && !empty($fedexCredentialPassword) && !empty($fedexAccountNumber) && !empty($fedexMeterNumber)) {
+            $fedexCredentials = new Vinnia\Shipping\FedEx\Credentials($fedexCredentialKey, $fedexCredentialPassword, $fedexAccountNumber, $fedexMeterNumber);
+            $fedexService = new Vinnia\Shipping\FedEx\Service($guzzle, $fedexCredentials);
+            array_push($services, $fedexService);
         }
 
         return $services;
@@ -391,31 +395,31 @@ class Vinnia_Tracker
 
         $promise = $compositeTracker->getTrackingStatus($trackingNumber)->then(
             function ($result) use ($trackingNumber, $templateLoader) {
-
-                //if result == null
-
                 ob_start();
+
                 $templateLoader->getTemplate('tracking-result.php', [
                     "result" => $result,
                     "trackingNumber" => $trackingNumber
                 ]);
+
                 $html = ob_get_clean();
 
                 $response['html'] = $html;
                 $response['success'] = true;
                 $response['trackingNo'] = $trackingNumber;
-                $response['data'] = $result;
+                //$response['data'] = $result;
 
                 echo wp_json_encode($response);
             },
-            function($result) {
+            function ($result) {
                 $response['html'] = '<h1>No!</h1>';
                 $response['success'] = false;
                 $response['trackingNo'] = "none";
                 $response['data'] = $result;
                 echo wp_json_encode($response);
             });
-        //4796890652
+        //4796890652 - dhl
+        //1ZA5483A0494847727 - ups
 
         $result = $promise->wait();
 

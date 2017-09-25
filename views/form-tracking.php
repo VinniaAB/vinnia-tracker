@@ -10,13 +10,13 @@
 <form class="">
     <div class="form-group">
         <div class="input-group">
-            <label class="sr-only" for="trackingNumber"><?= __('Tracking number', 'ysds'); ?></label>
+            <label class="sr-only" for="trackingNumber"><?= __('Tracking number', 'vinnia-tracker'); ?></label>
             <input type="text"
                    class="form-control"
                    id="trackingNumber"
-                   placeholder="<?= __('Tracking number/AWB', 'ysds'); ?>"/>
+                   placeholder="<?= __('Tracking number/AWB', 'vinnia-tracker'); ?>"/>
             <span class="input-group-btn">
-        <button class="btn btn-primary js-track-shipment"><?= __('Track', 'ysds'); ?></button>
+        <button class="btn btn-primary js-track-shipment"><?= __('Track', 'vinnia-tracker'); ?></button>
             </span>
         </div>
     </div>

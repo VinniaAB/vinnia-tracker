@@ -14,7 +14,14 @@
 //$trackingResult = $data['Tracks'][0];
 $header = sprintf(__('Results from tracking of %s', 'vinnia-tracker'), $trackingNumber);
 $activities = $result->activities;
+error_log(print_r($result, true));
 ?>
+
+<?php if (empty($activities)) : ?>
+    <div class="page-header">
+        <h3><?= sprintf(__('No shipments found with tracking number %s', 'vinnia-tracker'), $trackingNumber); ?></h3>
+    </div>
+<?php else: ?>
 
 <div class="page-header">
     <h3 id="timeline"><?= $header ?></h3>
@@ -60,3 +67,4 @@ $activities = $result->activities;
     endforeach;
     ?>
 </ul>
+<?php endif;

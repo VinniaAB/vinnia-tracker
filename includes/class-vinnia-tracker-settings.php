@@ -373,6 +373,14 @@ class Vinnia_Tracker_Settings
                     'default' => '',
                     'placeholder' => __('Account number', 'vinnia-tracker')
                 ],
+                [
+                    'id' => 'tnt_account_country_code',
+                    'label' => 'Account Country Code',
+                    'description' => __('An account country code for the account.', 'vinnia-tracker'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => __('Account country code', 'vinnia-tracker')
+                ],
             ]
         ];
 
