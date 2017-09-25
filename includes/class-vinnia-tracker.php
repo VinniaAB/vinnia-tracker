@@ -395,7 +395,6 @@ class Vinnia_Tracker
                 //if result == null
 
                 ob_start();
-                //include plugin_dir_path(__DIR__) . 'views/tracking-result.php';
                 $templateLoader->getTemplate('tracking-result.php', [
                     "result" => $result,
                     "trackingNumber" => $trackingNumber

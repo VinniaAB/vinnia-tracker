@@ -345,8 +345,6 @@ class Vinnia_Tracker_Settings
             ]
         ];
 
-
-
         $settings['TNT'] = [
             'title' => 'TNT',
             'description' => 'Add credentials for tracking on TNT',
