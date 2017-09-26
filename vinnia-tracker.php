@@ -19,6 +19,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+require_once ('vendor/autoload.php');
+
 // Load plugin class files
 require_once( 'includes/class-vinnia-tracker-template-loader.php' );
 require_once( 'includes/class-vinnia-tracker-shortcodes.php' );
