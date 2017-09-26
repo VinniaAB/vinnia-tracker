@@ -420,6 +420,8 @@ class Vinnia_Tracker
             });
         //4796890652 - dhl
         //1ZA5483A0494847727 - ups
+        //821072114 - tnt
+        //770332674590 - fedex
 
         $result = $promise->wait();
 

@@ -1,53 +1,5 @@
 [
     {
-        "name": "vinnia/util",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/VinniaAB/util.git",
-            "reference": "054a3c255c2a8cb3edb8ea2321731e615f93940d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/VinniaAB/util/zipball/054a3c255c2a8cb3edb8ea2321731e615f93940d",
-            "reference": "054a3c255c2a8cb3edb8ea2321731e615f93940d",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=7.1.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^6.2"
-        },
-        "time": "2017-08-09T10:38:06+00:00",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-4": {
-                "Vinnia\\Util\\": "src/"
-            }
-        },
-        "autoload-dev": {
-            "psr-4": {
-                "Vinnia\\Util\\Tests\\": "tests/unit/"
-            }
-        },
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Vinnia AB",
-                "email": "hello@vinnia.se"
-            }
-        ],
-        "support": {
-            "source": "https://github.com/VinniaAB/util/tree/master",
-            "issues": "https://github.com/VinniaAB/util/issues"
-        }
-    },
-    {
         "name": "moneyphp/money",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -367,18 +319,66 @@
         ]
     },
     {
+        "name": "vinnia/util",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/VinniaAB/util.git",
+            "reference": "13cdcb950bb85e7ee85e2abf738edb316a351ad1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/VinniaAB/util/zipball/13cdcb950bb85e7ee85e2abf738edb316a351ad1",
+            "reference": "13cdcb950bb85e7ee85e2abf738edb316a351ad1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.1.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^6.2"
+        },
+        "time": "2017-09-26T00:13:56+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "Vinnia\\Util\\": "src/"
+            }
+        },
+        "autoload-dev": {
+            "psr-4": {
+                "Vinnia\\Util\\Tests\\": "tests/unit/"
+            }
+        },
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Vinnia AB",
+                "email": "hello@vinnia.se"
+            }
+        ],
+        "support": {
+            "source": "https://github.com/VinniaAB/util/tree/master",
+            "issues": "https://github.com/VinniaAB/util/issues"
+        }
+    },
+    {
         "name": "vinnia/shipping",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/VinniaAB/shipping.git",
-            "reference": "f528a5cc334aee08bd0ef03c6e7c015bcb47b7d5"
+            "reference": "60848996cd0a49fba93d6b354f4f7eb7c2921d58"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/VinniaAB/shipping/zipball/f528a5cc334aee08bd0ef03c6e7c015bcb47b7d5",
-            "reference": "f528a5cc334aee08bd0ef03c6e7c015bcb47b7d5",
+            "url": "https://api.github.com/repos/VinniaAB/shipping/zipball/60848996cd0a49fba93d6b354f4f7eb7c2921d58",
+            "reference": "60848996cd0a49fba93d6b354f4f7eb7c2921d58",
             "shasum": ""
         },
         "require": {
@@ -393,7 +393,7 @@
         "require-dev": {
             "phpunit/phpunit": "^6.0"
         },
-        "time": "2017-09-21T15:22:33+00:00",
+        "time": "2017-09-26T01:05:26+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
