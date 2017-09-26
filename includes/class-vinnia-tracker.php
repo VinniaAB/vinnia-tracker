@@ -187,8 +187,10 @@ class Vinnia_Tracker
      */
     public function enqueue_styles()
     {
-        wp_register_style($this->_token . '-frontend', esc_url($this->assets_url) . 'css/frontend.css', array(), $this->_version);
-        wp_enqueue_style($this->_token . '-frontend');
+        if (empty(get_option($this->settings->base . 'disable_css_loading'))) {
+            wp_register_style($this->_token . '-frontend', esc_url($this->assets_url) . 'css/frontend.css', array(), $this->_version);
+            wp_enqueue_style($this->_token . '-frontend');
+        }
     } // End enqueue_styles ()
 
     /**
@@ -407,7 +409,6 @@ class Vinnia_Tracker
                 $response['html'] = $html;
                 $response['success'] = true;
                 $response['trackingNo'] = $trackingNumber;
-                //$response['data'] = $result;
 
                 echo wp_json_encode($response);
             },
