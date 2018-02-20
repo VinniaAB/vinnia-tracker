@@ -37,3 +37,12 @@ jQuery(document).ready(function($) {
 
     });
 });
+
+/*
+TODO: Vanilla version
+
+document.addEventListener("DOMContentLoaded", function() {
+  // code...
+});
+
+ */

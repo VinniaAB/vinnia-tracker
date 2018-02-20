@@ -31,10 +31,10 @@ class Vinnia_Tracker_Shortcodes {
 
     public static function form()
     {
-        $template = plugin_dir_path(__DIR__).'views/form-tracking.php';
+        $templateLoader = new TemplateLoader();
 
         ob_start();
-        include($template);
+        $templateLoader->getTemplate('form-tracking.php');
         return ob_get_clean();
     }
 }

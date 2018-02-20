@@ -13,7 +13,7 @@
 
 //$trackingResult = $data['Tracks'][0];
 $header = sprintf(__('Results from tracking of %s', 'vinnia-tracker'), $trackingNumber);
-$activities = $result->activities;
+$activities = $result->activities ?? null;
 ?>
 
 <?php if (empty($activities)) : ?>

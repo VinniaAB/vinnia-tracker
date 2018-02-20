@@ -280,7 +280,7 @@ class Vinnia_Tracker_Settings
             'fields' => [
                 [
                     'id' => 'fedex_credential_key',
-                    'label' => 'Credential Keu',
+                    'label' => 'Credential Key',
                     'description' => __('This is where you place the credential key.', 'vinnia-tracker'),
                     'type' => 'text',
                     'default' => '',
