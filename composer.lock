@@ -120,7 +120,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2017-12-07 21:04:15"
+            "time": "2017-12-07T21:04:15+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -185,7 +185,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-10-07 03:19:56"
+            "time": "2017-10-07T03:19:56+00:00"
         },
         {
             "name": "moneyphp/money",
@@ -367,7 +367,7 @@
                 "source": "https://github.com/VinniaAB/shipping/tree/master",
                 "issues": "https://github.com/VinniaAB/shipping/issues"
             },
-            "time": "2018-02-20 15:19:18"
+            "time": "2018-02-20T15:19:18+00:00"
         },
         {
             "name": "vinnia/util",
@@ -413,7 +413,7 @@
                 "source": "https://github.com/VinniaAB/util/tree/master",
                 "issues": "https://github.com/VinniaAB/util/issues"
             },
-            "time": "2017-10-09 16:15:43"
+            "time": "2017-10-09T16:15:43+00:00"
         }
     ],
     "packages-dev": [],
