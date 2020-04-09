@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Vinnia Tracker
- * Version: 1.0.1
+ * Version: 1.1.0
  * Plugin URI: http://www.vinnia.se/
  * Description: Plugin for tracking shipments.
  * Author: Joakim Carlsten
@@ -24,6 +24,7 @@ require_once ('vendor/autoload.php');
 // Load plugin class files
 require_once( 'includes/class-vinnia-tracker-template-loader.php' );
 require_once( 'includes/class-vinnia-tracker-shortcodes.php' );
+require_once( 'includes/class-vinnia-tracker-rest-controller.php' );
 require_once( 'includes/class-vinnia-tracker.php' );
 require_once( 'includes/class-vinnia-tracker-settings.php' );
 
@@ -39,7 +40,7 @@ require_once( 'includes/lib/class-vinnia-tracker-taxonomy.php' );
  * @return object Vinnia_Tracker
  */
 function Vinnia_Tracker () {
-	$instance = Vinnia_Tracker::instance( __FILE__, '1.0.0' );
+	$instance = Vinnia_Tracker::instance( __FILE__, '1.1.0' );
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Vinnia_Tracker_Settings::instance( $instance );

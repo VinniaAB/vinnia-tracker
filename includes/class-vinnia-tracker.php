@@ -97,6 +97,14 @@ class Vinnia_Tracker
     public $script_suffix;
 
     /**
+     * Rest controller for Tracking api
+     * @var     Vinnia_Tracker_Rest_Controller
+     * @access  public
+     * @since   1.1.0
+     */
+    public $rest_controller;
+
+    /**
      * Constructor function.
      * @access  public
      * @since   1.0.0
@@ -141,6 +149,8 @@ class Vinnia_Tracker
         // Handle localisation
         $this->load_plugin_textdomain();
         add_action('init', array($this, 'load_localisation'), 0);
+
+        add_action('rest_api_init', array($this, 'register_rest_routes'));
     } // End __construct ()
 
     /**
@@ -429,6 +439,11 @@ class Vinnia_Tracker
         //error_log(print_r($result, true));
 
         wp_die();
+    }
+
+    public function register_rest_routes() {
+        $this->rest_controller = new Vinnia_Tracker_Rest_Controller($this->servicesFactory());
+        $this->rest_controller->register_routes();
     }
 
 }
