@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Vinnia Tracker
- * Version: 1.1.5
+ * Version: 1.1.6
  * Plugin URI: http://www.vinnia.se/
  * Description: Plugin for tracking shipments.
  * Author: Joakim Carlsten
