@@ -720,12 +720,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/VinniaAB/shipping.git",
-                "reference": "42f4b45770ee9d26767bd23979b030004ae0373d"
+                "reference": "175918f5bc66b9ce836a32079e3a23859f85cad7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VinniaAB/shipping/zipball/42f4b45770ee9d26767bd23979b030004ae0373d",
-                "reference": "42f4b45770ee9d26767bd23979b030004ae0373d",
+                "url": "https://api.github.com/repos/VinniaAB/shipping/zipball/175918f5bc66b9ce836a32079e3a23859f85cad7",
+                "reference": "175918f5bc66b9ce836a32079e3a23859f85cad7",
                 "shasum": ""
             },
             "require": {
@@ -782,7 +782,7 @@
                 "source": "https://github.com/VinniaAB/shipping/tree/master",
                 "issues": "https://github.com/VinniaAB/shipping/issues"
             },
-            "time": "2021-09-02T10:23:41+00:00"
+            "time": "2021-09-15T11:41:57+00:00"
         },
         {
             "name": "vinnia/util",
